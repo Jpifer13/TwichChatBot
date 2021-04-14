@@ -1,0 +1,1 @@
+Starting project for a python chatbot to welcome and entertain users in Twitch chat.
