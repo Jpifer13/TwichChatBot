@@ -1,23 +1,16 @@
-<<<<<<< HEAD
 import os
 import random
-=======
->>>>>>> develop
-import irc.bot
 import requests
+from irc.bot import SingleServerIRCBot
 
 
-class TwitchBot(irc.bot.SingleServerIRCBot):
+class TwitchBot(SingleServerIRCBot):
     def __init__(self, username, client_id, token, channel):
         self.client_id = client_id
         self.token = token
-<<<<<<< HEAD
         self.channel = f'#{channel}'
 
         self.line_list = self.get_insults()
-=======
-        self.channel = '#' + channel
->>>>>>> develop
 
         # Get the channel id, we will need this for v5 API calls
         url = 'https://api.twitch.tv/kraken/users?login=' + channel
@@ -29,7 +22,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         server = 'irc.chat.twitch.tv'
         port = 6667
         print(f'Connecting to {server} on port {str(port)}...')
-        irc.bot.SingleServerIRCBot.__init__(self, [(server, port, 'oauth:'+token)], username, username)
+        SingleServerIRCBot.__init__(self, [(server, port, 'oauth:'+token)], username, username)
 
     def get_insults(self):
         cwd = os.getcwd()
@@ -55,6 +48,9 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             cmd = e.arguments[0].split(' ')[0][1:]
             print(f'Received command: {cmd}')
             self.do_command(e, cmd)
+        else:
+            # Log username and possibly send to db
+            pass
         return
 
     def do_command(self, e, cmd):
