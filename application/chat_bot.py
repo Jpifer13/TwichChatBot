@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import os
 import random
+=======
+>>>>>>> develop
 import irc.bot
 import requests
 
@@ -8,9 +11,13 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     def __init__(self, username, client_id, token, channel):
         self.client_id = client_id
         self.token = token
+<<<<<<< HEAD
         self.channel = f'#{channel}'
 
         self.line_list = self.get_insults()
+=======
+        self.channel = '#' + channel
+>>>>>>> develop
 
         # Get the channel id, we will need this for v5 API calls
         url = 'https://api.twitch.tv/kraken/users?login=' + channel
