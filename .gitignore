@@ -140,4 +140,4 @@ cython_debug/
 .flake8
 
 # IDE
-.vscode
+.vscode*
