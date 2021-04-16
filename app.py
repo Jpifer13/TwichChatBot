@@ -1,4 +1,5 @@
 import sys
+import os
 from application.chat_bot import TwitchBot
 from config import config
 
@@ -6,6 +7,8 @@ from config import config
 def main():
     try:
         username = config.T_USERNAME
+        print(username)
+        print(os.getenv("T_USERNAME"))
         client_id = config.T_CLIENT_ID
         token = config.T_TOKEN
         channel = config.T_CHANNEL
