@@ -91,25 +91,29 @@ class TwitchBot(SingleServerIRCBot):
             url = f'https://api.twitch.tv/kraken/channels/{self.channel_id}'
             headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
             r = requests.get(url, headers=headers).json()
-            c.privmsg(self.channel, f'{r["display_name"]} is currently playing {r["game"]}')
+            if r:
+                c.privmsg(self.channel, f'{r["display_name"]} is currently playing {r["game"]}')
 
         # Poll the API the get the current status of the stream
         elif cmd == "title":
             url = f'https://api.twitch.tv/kraken/channels/{self.channel_id}'
             headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
             r = requests.get(url, headers=headers).json()
-            c.privmsg(self.channel, f'{r["display_name"]} channel title is currently {r["status"]}')
+            if r:
+                c.privmsg(self.channel, f'{r["display_name"]} channel title is currently {r["status"]}')
 
         # Provide basic information to viewers for specific commands
         elif cmd == "viewers":
             url = f'https://api.twitch.tv/helix/streams?user_id=130684441'
             headers = {'Client-ID': 'gp762nuuoqcoxypju8c569th9wz7q5', 'Authorization': f'Bearer c1klucwq3wgjxnzs1a7uggtf8su850', 'Accept': 'application/vnd.twitchtv.v5+json'}
             r = requests.get(url, headers=headers).json()
-            c.privmsg(self.channel, f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!")
+            if r:
+                c.privmsg(self.channel, f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!")
 
         elif cmd == "roast":
             message = random.choice(self.line_list)
-            c.privmsg(self.channel, message)
+            if r:
+                c.privmsg(self.channel, message)
 
         # The command was not recognized
         else:
