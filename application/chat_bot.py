@@ -16,6 +16,8 @@ class TwitchBot(SingleServerIRCBot):
         self.console_log_level = console_log_level
         self.application = application
         self.logging_utils = None
+        self.api_client_id = os.getenv('API_CLIENT_ID')
+        self.api_oauth = os.getenv('API_OAUTH')
         self.server = server
         self.port = port
         self.client_id = client_id
@@ -105,7 +107,7 @@ class TwitchBot(SingleServerIRCBot):
         # Provide basic information to viewers for specific commands
         elif cmd == "viewers":
             url = f'https://api.twitch.tv/helix/streams?user_id=130684441'
-            headers = {'Client-ID': 'gp762nuuoqcoxypju8c569th9wz7q5', 'Authorization': f'Bearer c1klucwq3wgjxnzs1a7uggtf8su850', 'Accept': 'application/vnd.twitchtv.v5+json'}
+            headers = {'Client-ID': self.api_client_id, 'Authorization': self.api_oauth, 'Accept': 'application/vnd.twitchtv.v5+json'}
             r = requests.get(url, headers=headers).json()
             if r.get('data'):
                 c.privmsg(self.channel, f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!")
