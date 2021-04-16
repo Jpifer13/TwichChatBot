@@ -1,6 +1,10 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
 FROM python:3.8-slim-buster
 
+ENV T_USERNAME=$T_USERNAME
+ENV T_CLIENT_ID=$T_CLIENT_ID
+ENV T_TOKEN=$T_TOKEN
+ENV T_CHANNEL=$T_CHANNEL
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
 
