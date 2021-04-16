@@ -3,4 +3,6 @@ docker build -t chat .
 docker run -e T_USERNAME \
 -e T_CHANNEL \
 -e T_CLIENT_ID \
--e T_TOKEN chat
+-e T_TOKEN \
+-e API_OATH \
+-e API_CLIENT_ID chat
