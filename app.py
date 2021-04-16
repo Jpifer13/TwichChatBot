@@ -13,7 +13,7 @@ def main():
         print(f'User: {username} with client id: {client_id} is logging in as bot.')
 
         bot = TwitchBot(username, client_id, token, channel)
-        bot.start()
+        bot.run()
     except Exception as err:
         print(err)
         sys.exit(1)
