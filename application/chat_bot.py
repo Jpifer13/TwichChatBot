@@ -101,9 +101,12 @@ class TwitchBot(SingleServerIRCBot):
             c.privmsg(self.channel, f'{r["display_name"]} channel title is currently {r["status"]}')
 
         # Provide basic information to viewers for specific commands
-        elif cmd == "raffle":
-            message = "This is an example bot, replace this text with your raffle text."
-            c.privmsg(self.channel, message)
+        elif cmd == "viewers":
+            url = f'https://api.twitch.tv/helix/streams?user_id=130684441'
+            headers = {'Client-ID': 'gp762nuuoqcoxypju8c569th9wz7q5', 'Authorization': f'Bearer c1klucwq3wgjxnzs1a7uggtf8su850', 'Accept': 'application/vnd.twitchtv.v5+json'}
+            r = requests.get(url, headers=headers).json()
+            c.privmsg(self.channel, f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!")
+
         elif cmd == "roast":
             message = random.choice(self.line_list)
             c.privmsg(self.channel, message)
