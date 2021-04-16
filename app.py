@@ -1,4 +1,5 @@
 import sys
+import os
 from application.chat_bot import TwitchBot
 from config import config
 
