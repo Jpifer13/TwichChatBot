@@ -63,18 +63,21 @@ class TwitchBot(SingleServerIRCBot):
     def on_pubmsg(self, c, e):
         # Log username and if we already have then increase comment value
         source = e.source  # username of the message
-        if not self.users.get(source, None):
-            # We don't have record of the user so add
-            self.users[source] = {'comments': 1, 'tags': e.tags, 'messages': [e.arguments[0]]}
-        else:
-            # User exists so update records
-            self.users[source]['comments'] = self.users[source]['comments'] + 1
-            self.users[source]['tags'] = e.tags
-            self.users[source]['messages'].append(e.arguments[0])
-        
-        # Write to json file
-        with open(f'{self.working_directoy}/application/utils/usernames.json', 'w') as users:
-            json.dump(self.users, users)
+        if not self.users:  # username json not found so create
+            with open(f'{self.working_directoy}/application/utils/usernames.json', 'w') as users_json:
+                json.dump({}, users_json)
+        elif self.users:
+            if not self.users.get(source, None):
+                # We don't have record of the user so add
+                self.users[source] = {'comments': 1, 'tags': e.tags, 'messages': [e.arguments[0]]}
+            else:
+                # User exists so update records
+                self.users[source]['comments'] = self.users[source]['comments'] + 1
+                self.users[source]['tags'] = e.tags
+                self.users[source]['messages'].append(e.arguments[0])
+            # Write to json file
+            with open(f'{self.working_directoy}/application/utils/usernames.json', 'w') as users:
+                json.dump(self.users, users)
 
         # If a chat message starts with an exclamation point, try to run it as a command
         if e.arguments[0][:1] == '!':
@@ -87,7 +90,6 @@ class TwitchBot(SingleServerIRCBot):
         
         # Update local users json
         self._load_username_logs()
-        return
 
     def do_command(self, e, cmd):
         c = self.connection
