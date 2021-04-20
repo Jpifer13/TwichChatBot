@@ -27,6 +27,7 @@ class TwitchBot(SingleServerIRCBot):
         self.channel_id = None
         self.username = username # TwitchBots username
         self.users = None  # List of all usernames
+        self._active = True  # If false commands won't work, to handle overflow of traffic
 
         # Start logger
         self._initialize_logging()
@@ -79,7 +80,10 @@ class TwitchBot(SingleServerIRCBot):
         if e.arguments[0][:1] == '!':
             cmd = e.arguments[0].split(' ')[0][1:]
             print(f'Received command: {cmd}')
-            self.do_command(e, cmd)
+            if self._active:
+                self.do_command(e, cmd)
+            elif not self._active and cmd == 'activate':
+                self._active = True
         
         # Update local users json
         self._load_username_logs()
@@ -88,8 +92,12 @@ class TwitchBot(SingleServerIRCBot):
     def do_command(self, e, cmd):
         c = self.connection
 
+        # Activate and deactivate command
+        if cmd == "deactivate":
+            self._active = False
+
         # Poll the API to get current game.
-        if cmd == "game":
+        elif cmd == "game":
             url = f'https://api.twitch.tv/kraken/channels/{self.channel_id}'
             headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
             r = requests.get(url, headers=headers).json()
