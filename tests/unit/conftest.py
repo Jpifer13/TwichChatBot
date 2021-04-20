@@ -1,6 +1,5 @@
 import os
-from unittest.mock import patch
-from unittest.mock import MagicMock
+from unittest.mock import patch, MagicMock
 from application.chat_bot import TwitchBot
 import pytest
 from config import config
