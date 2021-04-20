@@ -14,8 +14,7 @@ def bot():
 
     with patch('application.chat_bot.TwitchBot._load_channel_id') as _:
         with patch('application.chat_bot.TwitchBot._load_username_logs') as _:
-            bot = TwitchBot(username, client_id, token, channel)
-            bot.logging_utils = MagicMock()
+            bot = TwitchBot(username, client_id, token, channel, logging_utils=MagicMock())
     yield bot
 
 

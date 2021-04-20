@@ -12,11 +12,11 @@ from irc.bot import SingleServerIRCBot
 
 class TwitchBot(SingleServerIRCBot):
     def __init__(self, username, client_id, token, channel, server='irc.chat.twitch.tv', port=6667,
-                 log_level=logging.INFO, console_log_level=None, application='TwitchChatBot'):
+                 log_level=logging.INFO, console_log_level=None, application='TwitchChatBot', logging_utils=None):
         self.log_level = log_level
         self.console_log_level = console_log_level
         self.application = application
-        self.logging_utils = None
+        self.logging_utils = logging_utils
         self.api_client_id = os.getenv('API_CLIENT_ID')
         self.api_oauth = os.getenv('API_OAUTH')
         self.server = server
@@ -30,9 +30,10 @@ class TwitchBot(SingleServerIRCBot):
         self.users = None  # List of all usernames
         self._active = True  # If false commands won't work, to handle overflow of traffic
 
-        # Start logger
-        self._initialize_logging()
-        self.logging_utils.logApplicationStart()
+        # Start logger 
+        if not self.logging_utils:
+            self._initialize_logging()
+            self.logging_utils.logApplicationStart()
         # Get the channel id, we will need this for v5 API calls
         self._load_channel_id(channel)
         # Create IRC bot connection
