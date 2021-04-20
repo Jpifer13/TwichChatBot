@@ -1,5 +1,3 @@
-from unittest.mock import patch
-from application.chat_bot import TwitchBot
 from tests.unit.conftest import Mock_Bot
 
 

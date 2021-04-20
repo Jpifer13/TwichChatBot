@@ -11,7 +11,8 @@ from irc.bot import SingleServerIRCBot
 
 
 class TwitchBot(SingleServerIRCBot):
-    def __init__(self, username, client_id, token, channel, server='irc.chat.twitch.tv', port=6667, log_level=logging.INFO, console_log_level=None, application='TwitchChatBot'):
+    def __init__(self, username, client_id, token, channel, server='irc.chat.twitch.tv', port=6667,
+                 log_level=logging.INFO, console_log_level=None, application='TwitchChatBot'):
         self.log_level = log_level
         self.console_log_level = console_log_level
         self.application = application
@@ -25,7 +26,7 @@ class TwitchBot(SingleServerIRCBot):
         self.channel = f'#{channel}'
         self.working_directoy = os.getcwd()
         self.channel_id = None
-        self.username = username # TwitchBots username
+        self.username = username  # TwitchBots username
         self.users = None  # List of all usernames
         self._active = True  # If false commands won't work, to handle overflow of traffic
 
@@ -40,13 +41,14 @@ class TwitchBot(SingleServerIRCBot):
         self._load_username_logs()
         # Load roasts
         self.line_list = self.get_insults()
-    
+
     def run(self):
         self.start()
 
     def get_insults(self):
         try:
-            insult_list = [line.rstrip('\n') for line in open(f'{self.working_directoy}/application/resources/insults.txt')]
+            insult_list = [line.rstrip('\n') for line in open(
+                f'{self.working_directoy}/application/resources/insults.txt')]
             return insult_list
         except (FileNotFoundError, Exception) as err:
             print(err)
@@ -87,7 +89,7 @@ class TwitchBot(SingleServerIRCBot):
                 self.do_command(e, cmd)
             elif not self._active and cmd == 'activate':
                 self._active = True
-        
+
         # Update local users json
         self._load_username_logs()
 
@@ -116,11 +118,15 @@ class TwitchBot(SingleServerIRCBot):
 
         # Provide basic information to viewers for specific commands
         elif cmd == "viewers":
-            url = f'https://api.twitch.tv/helix/streams?user_id=130684441'
-            headers = {'Client-ID': self.api_client_id, 'Authorization': self.api_oauth, 'Accept': 'application/vnd.twitchtv.v5+json'}
+            url = 'https://api.twitch.tv/helix/streams?user_id=130684441'
+            headers = {'Client-ID': self.api_client_id, 'Authorization': self.api_oauth,
+                       'Accept': 'application/vnd.twitchtv.v5+json'}
             r = requests.get(url, headers=headers).json()
             if r.get('data'):
-                c.privmsg(self.channel, f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!")
+                c.privmsg(
+                    self.channel,
+                    f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!"
+                )
 
         elif cmd == "roast":
             message = random.choice(self.line_list)
@@ -129,26 +135,26 @@ class TwitchBot(SingleServerIRCBot):
         # The command was not recognized
         else:
             c.privmsg(self.channel, f'Did not understand command: {cmd}')
-    
+
     def _initialize_logging(self):
         try:
             timestamp = time.strftime("%Y%m%d%H%M%S")
             loggingFile = f'logs/{self.application}-{timestamp}.log'
             self.logging_utils = LoggingUtils(self.application, logFile=loggingFile,
-                                        fileLevel=self.log_level, consoleLevel=self.console_log_level)
+                                              fileLevel=self.log_level, consoleLevel=self.console_log_level)
         except Exception as err:
             print(f"Unable to instantiate logging.\n{err}")
-    
+
     def _load_channel_id(self, channel):
         url = f'https://api.twitch.tv/kraken/users?login={channel}'
         headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
         r = requests.get(url, headers=headers).json()
         self.channel_id = r['users'][0]['_id']
-    
+
     def _load_irc_connection(self):
         print(f'Connecting to {self.server} on port {str(self.port)}...')
         SingleServerIRCBot.__init__(self, [(self.server, self.port, 'oauth:'+self.token)], self.username, self.username)
-    
+
     def _load_username_logs(self):
         # Open username log
         with open(f'{self.working_directoy}/application/utils/usernames.json') as users:

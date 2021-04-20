@@ -14,8 +14,8 @@ def bot():
 
     with patch('application.chat_bot.TwitchBot._load_channel_id') as _:
         with patch('application.chat_bot.TwitchBot._load_username_logs') as _:
-                bot = TwitchBot(username, client_id, token, channel)
-                bot.logging_utils = MagicMock()
+            bot = TwitchBot(username, client_id, token, channel)
+            bot.logging_utils = MagicMock()
     yield bot
 
 
@@ -40,7 +40,7 @@ class MockMessage:
 class DataGenerator:
     def __init__(self, faker):
         self.fake = faker
-    
+
     def create_message(self):
         e = MockMessage(self.fake)
         c = MagicMock()
@@ -68,13 +68,14 @@ class Mock_Bot:
         self.channel = '#some_channel'
         self.working_directoy = os.getcwd()
         self.channel_id = None
-        self.username = 'Mock_Bot' # TwitchBots username
+        self.username = 'Mock_Bot'  # TwitchBots username
         self.users = None  # List of all usernames
         self._active = True  # If false commands won't work, to handle overflow of traffic
 
     def get_insults(self):
         try:
-            insult_list = [line.rstrip('\n') for line in open(f'{self.working_directoy}/application/resources/insults.txt')]
+            insult_list = [line.rstrip('\n') for line in open(
+                f'{self.working_directoy}/application/resources/insults.txt')]
             return insult_list
         except (FileNotFoundError, Exception) as err:
             print(err)
