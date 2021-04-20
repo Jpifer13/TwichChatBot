@@ -9,7 +9,7 @@ from config import config
 def bot():
     username = 'test_username'
     client_id = 'test_client_id'
-    token = 'Bearer test_token'
+    token = 'test_token'
     channel = 'test_channel'
 
     with patch('application.chat_bot.TwitchBot._load_channel_id') as _:
