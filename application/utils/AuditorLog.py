@@ -7,14 +7,14 @@ Key changes
 
 -----------
 1/3/2020: SW Created.
- 
 """
 # Standard libraries
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 import getpass     # Used to get the username. Works on Windows and Linux.
 import platform    # Used to get the hostname. Works on Windows and Linux.
+
 
 class AuditorLog:
     """
@@ -33,7 +33,7 @@ class AuditorLog:
         Version: the version number of the application.
         Date/Time: the time that the application was run.
         User ID: the user ID of the person who ran the application.
-        Hostname: the system on which the application was run. 
+        Hostname: the system on which the application was run.
         Invocation: the invocation for the application, showing all command line arguments.
         Results: describes the result of the operation
         Inputs: a list of the inputs for this run. Each file that is read is listed.
@@ -41,11 +41,12 @@ class AuditorLog:
 
 
     This log is distinct from an application log file, which contains the detailed information recorded
-    during the running of the application. That log is used for troubleshooting. 
+    during the running of the application. That log is used for troubleshooting.
     """
+
     def __init__(self, applicationName: str, applicationVersion: str):
         """
-        __init__ constructs a valid instance of the AuditorLog class. 
+        __init__ constructs a valid instance of the AuditorLog class.
 
         Parameters
         ----------
@@ -56,8 +57,8 @@ class AuditorLog:
 
         Raises
         ------
-            ValueError 
-                if the applicatiohName or applicationVersion are None or empty strings.            
+            ValueError
+                if the applicatiohName or applicationVersion are None or empty strings.
         """
         # Values set by caller
         self._applicationName = applicationName
@@ -75,7 +76,8 @@ class AuditorLog:
         self._officialDateTimeFormat = '%d%b%Y %H:%M:%S'
         self._filenameDateTimeFormat = '%Y_%m_%d_%H%M%S'
         # The filename for the log file
-        self._filename = f"{self._applicationName}_{self._startDateTime.strftime(self._filenameDateTimeFormat)}.auditor.log"
+        self._filename = (f"{self._applicationName}_{self._startDateTime.strftime(self._filenameDateTimeFormat)}"
+                          f".auditor.log")
         self._invocation = ' '.join(sys.argv)
         self._result = "Not specified"
         self._inputList = []
@@ -92,8 +94,8 @@ class AuditorLog:
 
         Raises
         ------
-            ValueError 
-                If the result is None or empty string.            
+            ValueError
+                If the result is None or empty string.
         """
         if result:
             self._result = result
@@ -103,18 +105,18 @@ class AuditorLog:
 
     def addInput(self, inputString: str):
         """
-        Adds an Input to the list of inputs for this application. In most cases, this is a fully qualified 
-        path to an input file. Some applications may read information from a database or other non-file source. 
+        Adds an Input to the list of inputs for this application. In most cases, this is a fully qualified
+        path to an input file. Some applications may read information from a database or other non-file source.
 
         Parameters
         ----------
             inputString : String
-                A string with the fully qualified path to an input file or description of a non-file input. 
+                A string with the fully qualified path to an input file or description of a non-file input.
 
         Raises
         ------
-            ValueError 
-                if the inputString value is None or empty string.            
+            ValueError
+                if the inputString value is None or empty string.
         """
         if inputString:
             self._inputList.append(inputString)
@@ -124,20 +126,20 @@ class AuditorLog:
 
     def addOutput(self, outputString: str):
         """
-        Adds an Output to the list of outputs for this application. In most cases, this should 
+        Adds an Output to the list of outputs for this application. In most cases, this should
         be a fully qualified path for the output file. Call this function once for each output
-        that is generated. Some applications may record that the output is written to a database 
+        that is generated. Some applications may record that the output is written to a database
         or other non-file location.
 
         Parameters
         ----------
             outputString : String
-                A string with the fully qualified path to an output file or description of a non-file output. 
+                A string with the fully qualified path to an output file or description of a non-file output.
 
         Raises
         ------
-            ValueError 
-                if the outputString value is None or empty string.            
+            ValueError
+                if the outputString value is None or empty string.
         """
         if outputString:
             self._outputList.append(outputString)
@@ -147,8 +149,8 @@ class AuditorLog:
 
     def writeLogFile(self, directory=None):
         """
-        Writes the Auditor Log to the specified directory. This function should be called at the end of 
-        your program once you have listed all of the generated output files and recorded the result of 
+        Writes the Auditor Log to the specified directory. This function should be called at the end of
+        your program once you have listed all of the generated output files and recorded the result of
         the application.
 
         If directory is None, writes the Auditor Log to the current working directory.
@@ -157,18 +159,18 @@ class AuditorLog:
 
         The caller is responsible for handling any IOErrors that are raised. These will
         occur if the directory specified is not writable or if the current working directory
-        is not writable (when no directory is specified). 
+        is not writable (when no directory is specified).
 
         Parameters
         ----------
             directory : String
                 A fully qualitified path to the location to write the Auditor Log. The filename
-                used is set by this class and cannot be altered by the caller. 
+                used is set by this class and cannot be altered by the caller.
 
         Raises
         ------
-            ValueError 
-                if the specified directory does not exist.            
+            ValueError
+                if the specified directory does not exist.
         """
         if directory:
             # Validate that the directory exists
