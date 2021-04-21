@@ -48,7 +48,7 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag chat:$(date +%s)
     - name: Publish Docker image
-      run: docker push $DOCKER_USER/chat_borts
+      run: docker push $DOCKER_USER/chat
   
   redeploy:
     name: Redeploy webhook call
