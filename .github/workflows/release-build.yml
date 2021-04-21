@@ -46,9 +46,7 @@ jobs:
     - name: Login to Docker Hub
       run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
     - name: Build the Docker image
-      run: docker build . chat --file Dockerfile
-    - name: Tag image
-      run: docker tag chat $DOCKER_USER/chat
+      run: docker build . --file Dockerfile --tag $DOCKER_USER/chat
     - name: Publish Docker image
       run: docker push $DOCKER_USER/chat
   
