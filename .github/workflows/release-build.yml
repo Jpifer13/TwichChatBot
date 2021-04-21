@@ -2,9 +2,9 @@ name: Release Build - Test, Build & Redeploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, release ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, release ]
 
 jobs:
   test:
