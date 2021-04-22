@@ -144,3 +144,6 @@ cython_debug/
 
 # Log files
 logs/*
+
+# exception to the rule
+!logs/.gitkeep 
