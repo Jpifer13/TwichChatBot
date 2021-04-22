@@ -146,4 +146,7 @@ cython_debug/
 logs/*
 
 # exception to the rule
-!logs/.gitkeep 
+!logs/.gitkeep
+
+# Ignore workflows
+.github/*
