@@ -89,7 +89,7 @@ class TwitchBot(SingleServerIRCBot):
             if self._active:
                 self.do_command(e, cmd)
             elif not self._active and cmd == 'activate':
-                self._active = True
+                self.do_command(e, cmd)
 
         # Update local users json
         self._load_username_logs()
@@ -101,6 +101,14 @@ class TwitchBot(SingleServerIRCBot):
             # Activate and deactivate command
             if cmd == "deactivate":
                 self._active = False
+                message = 'Ouch! That one hurt my bobblesack... Good luck trying to find me you bastard!'
+                c.privmsg(self.channel, message)
+            
+            
+            if cmd == "activate":
+                self._active = True
+                message = 'I see you came to your senses... Wise choice.'
+                c.privmsg(self.channel, message)
 
             # Poll the API to get current game.
             elif cmd == "game":
