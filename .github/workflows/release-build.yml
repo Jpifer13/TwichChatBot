@@ -56,7 +56,8 @@ jobs:
     needs: [docker-build]
     steps:
       - name: Deploy docker container webhook
-        uses: TwichChatBot/webhook-action@master
+        uses: distributhor/workflow-webhook@v1
         env:
-          WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
+          webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
+          webhook_secret: 'temp'
           data: "{ 'repository': 'TwichChatBot'}"
