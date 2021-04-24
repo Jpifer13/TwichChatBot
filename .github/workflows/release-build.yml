@@ -58,5 +58,5 @@ jobs:
       - name: Deploy docker container webhook
         uses: distributhor/workflow-webhook@v1
         env:
-          WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
+          webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
           data: "{ 'repository': 'TwichChatBot'}"
