@@ -59,5 +59,4 @@ jobs:
         uses: distributhor/workflow-webhook@v1
         env:
           webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
-          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
           data: "{ 'repository': 'TwichChatBot'}"
