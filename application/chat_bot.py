@@ -97,45 +97,52 @@ class TwitchBot(SingleServerIRCBot):
     def do_command(self, e, cmd):
         c = self.connection
 
-        # Activate and deactivate command
-        if cmd == "deactivate":
-            self._active = False
+        try:
+            # Activate and deactivate command
+            if cmd == "deactivate":
+                self._active = False
 
-        # Poll the API to get current game.
-        elif cmd == "game":
-            url = f'https://api.twitch.tv/kraken/channels/{self.channel_id}'
-            headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
-            r = requests.get(url, headers=headers).json()
-            if r.get('display_name'):
-                c.privmsg(self.channel, f'{r["display_name"]} is currently playing {r["game"]}')
+            # Poll the API to get current game.
+            elif cmd == "game":
+                url = f'https://api.twitch.tv/kraken/channels/{self.channel_id}'
+                headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
+                r = requests.get(url, headers=headers).json()
+                if r.get('display_name'):
+                    c.privmsg(self.channel, f'{r["display_name"]} is currently playing {r["game"]}')
 
-        # Poll the API the get the current status of the stream
-        elif cmd == "title":
-            url = f'https://api.twitch.tv/kraken/channels/{self.channel_id}'
-            headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
-            r = requests.get(url, headers=headers).json()
-            if r.get('display_name'):
-                c.privmsg(self.channel, f'{r["display_name"]} channel title is currently {r["status"]}')
+            # Poll the API the get the current status of the stream
+            elif cmd == "title":
+                url = f'https://api.twitch.tv/kraken/channels/{self.channel_id}'
+                headers = {'Client-ID': self.client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
+                r = requests.get(url, headers=headers).json()
+                if r.get('display_name'):
+                    status = r["status"]
+                    if "\n" in status:
+                        status = r["status"].replace("\n", "")
+                    c.privmsg(self.channel, f'{r["display_name"]} channel title is currently {status}')
 
-        # Provide basic information to viewers for specific commands
-        elif cmd == "viewers":
-            url = 'https://api.twitch.tv/helix/streams?user_id=130684441'
-            headers = {'Client-ID': self.api_client_id, 'Authorization': self.api_oauth,
-                       'Accept': 'application/vnd.twitchtv.v5+json'}
-            r = requests.get(url, headers=headers).json()
-            if r.get('data'):
-                c.privmsg(
-                    self.channel,
-                    f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!"
-                )
+            # Provide basic information to viewers for specific commands
+            elif cmd == "viewers":
+                url = 'https://api.twitch.tv/helix/streams?user_id=130684441'
+                headers = {'Client-ID': self.api_client_id, 'Authorization': self.api_oauth,
+                        'Accept': 'application/vnd.twitchtv.v5+json'}
+                r = requests.get(url, headers=headers).json()
+                if r.get('data'):
+                    c.privmsg(
+                        self.channel,
+                        f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!"
+                    )
 
-        elif cmd == "roast":
-            message = random.choice(self.line_list)
-            c.privmsg(self.channel, message)
+            elif cmd == "roast":
+                message = random.choice(self.line_list)
+                c.privmsg(self.channel, message)
 
-        # The command was not recognized
-        else:
-            c.privmsg(self.channel, f'Did not understand command: {cmd}')
+            # The command was not recognized
+            else:
+                c.privmsg(self.channel, f'Did not understand command: {cmd}')
+        except Exception as err:
+            print(err)
+            raise Exception
 
     def _initialize_logging(self):
         try:
