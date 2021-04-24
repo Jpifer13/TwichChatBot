@@ -132,6 +132,11 @@ class TwitchBot(SingleServerIRCBot):
                         self.channel,
                         f"{r['data'][0]['user_name']}'s channel currently has  {r['data'][0]['viewer_count']} viewers!"
                     )
+            
+            # Commands
+            elif cmd == "commands":
+                message = 'Current commands available are: "game", "title", "viewers", "roast", "deactivate"'
+                c.privmsg(self.channel, message)
 
             elif cmd == "roast":
                 message = random.choice(self.line_list)
