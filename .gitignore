@@ -135,3 +135,12 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Linter
+.flake8
+
+# IDE
+.vscode*
+
+# Log files
+logs/*
