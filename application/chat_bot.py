@@ -44,6 +44,7 @@ class TwitchBot(SingleServerIRCBot):
         self.line_list = self.get_insults()
 
     def run(self):
+        self.reactor.scheduler.execute_every(3600, self.timely_reminder)
         self.start()
 
     def get_insults(self):
@@ -62,6 +63,12 @@ class TwitchBot(SingleServerIRCBot):
         c.cap('REQ', ':twitch.tv/tags')
         c.cap('REQ', ':twitch.tv/commands')
         c.join(self.channel)
+
+    def timely_reminder(self):
+        self.connection.privmsg(
+            self.channel,
+            "Thanks to all viewers for joining in! If you haven't already, give me a follow! It is greatly appreciated!"
+        )
 
     def on_pubmsg(self, c, e):
         # Log username and if we already have then increase comment value
