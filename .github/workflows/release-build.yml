@@ -2,9 +2,9 @@ name: Release Build - Test, Build & Redeploy
 
 on:
   push:
-    branches: [ master, release ]
+    branches: [ master, release, develop ]
   pull_request:
-    branches: [ master, release ]
+    branches: [ master, release, develop ]
 
 jobs:
   test:
@@ -52,11 +52,12 @@ jobs:
   
   redeploy:
     name: Redeploy webhook call
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: [docker-build]
     steps:
       - name: Deploy docker container webhook
-        uses: TwichChatBot/webhook-action@master
+        uses: distributhor/workflow-webhook@v1
         env:
-          WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
+          webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
+          webhook_secret: 'temp'
           data: "{ 'repository': 'TwichChatBot'}"

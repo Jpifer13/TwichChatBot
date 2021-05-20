@@ -36,6 +36,16 @@ class MockMessage:
         self.type = 'pubmsg'
 
 
+class MockReponse:
+    def __init__(self, faker):
+        self.fake = faker
+        self.status = faker.pystr()
+        self.display_name = str(faker.name())
+
+    def json(self):
+        return {'status': self.status, 'display_name': self.display_name}
+
+
 class DataGenerator:
     def __init__(self, faker):
         self.fake = faker
@@ -49,6 +59,11 @@ class DataGenerator:
 @pytest.fixture(scope='function')
 def generator(faker):
     return DataGenerator(faker)
+
+
+@pytest.fixture(scope='function')
+def mock_response(faker):
+    return MockReponse(faker)
 
 
 @pytest.fixture(scope='function')
